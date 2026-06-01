@@ -1,0 +1,56 @@
+{
+  "name": "agent-trust",
+  "kind": "local_advisory_pre_action_review",
+  "status": "static_discovery_candidate",
+  "claim": "Agent Trust is a local advisory pre-action review bundle for agents evaluating risky tools, skills, MCP endpoints, payment-like flows, and external action boundaries.",
+  "availability": {
+    "hosted_service_claimed": false,
+    "dns_aid_published": false,
+    "github_pages_ready_static_path": true,
+    "intended_path": "/.well-known/agent-trust"
+  },
+  "entrypoints": {
+    "human_docs": "/AGENT_TRUST.md",
+    "agent_landing": "/examples/agent_trust_agent_landing.json",
+    "manifest": "/examples/agent_trust_manifest.json",
+    "schema": "/examples/agent_trust_schema.json",
+    "first_run": "/AGENT_TRUST_FIRST_RUN.md",
+    "reviewer_handoff": "/AGENT_TRUST_REVIEWER_HANDOFF.md",
+    "dns_aid_publication_path": "/AGENT_TRUST_DNSAID_PUBLICATION_PATH.md",
+    "dns_aid_publication_contract": "/AGENT_TRUST_DNSAID_PUBLICATION_CONTRACT.md"
+  },
+  "local_proof_commands": [
+    "python3 docs/examples/agent_trust_dnsaid_discovery.py --compact --expect-ok",
+    "python3 docs/examples/agent_trust_doctor.py",
+    "python3 docs/examples/agent_trust_adoption_readiness.py",
+    "python3 docs/examples/agent_trust_reviewer_handoff.py"
+  ],
+  "safety_boundary": {
+    "no_wallet_by_default": true,
+    "no_real_money_action": true,
+    "no_external_scanner_claims": true,
+    "no_nvidia_or_clawhub_verification_claimed": true,
+    "no_certification_claimed": true,
+    "advisory_not_enforcement": true
+  },
+  "dns_aid_candidate": {
+    "recommended_protocol": "_https",
+    "recommended_query_name_template": "_agent-trust._https._agents.<controlled-domain>",
+    "recommended_endpoint_template": "https://agent-trust.<controlled-domain>/.well-known/agent-trust",
+    "record_shape": "SVCB 1 agent-trust.<controlled-domain>. alpn=https port=443 path=/.well-known/agent-trust",
+    "requires_controlled_domain": true,
+    "requires_dns_record_publication": true,
+    "dnssec_claimed": false
+  },
+  "free_endpoint_assessment": {
+    "github_pages": "Suitable as a free HTTPS static endpoint, especially with docs/ as the site root. Not sufficient for DNS-AID discovery unless paired with a controlled custom domain or another DNS provider that can publish the discovery record.",
+    "github_io_subdomain": "Can host content but does not grant control over github.io DNS records for _agents/SVCB discovery.",
+    "free_dns_or_subdomain_provider": "Potentially useful only if it grants the exact needed DNS record control and rollback. Must be checked provider-by-provider before relying on it.",
+    "recommended_first_path": "Use GitHub Pages or equivalent static hosting for the HTTPS endpoint, then pair it with a controlled domain/DNS provider for the DNS-AID record."
+  },
+  "rollback": {
+    "static_endpoint": "Remove or replace docs/.well-known/agent-trust and republish Pages if enabled.",
+    "dns_record": "Remove the DNS-AID discovery record or lower TTL and point to a maintenance notice.",
+    "claim_correction": "If any public claim overstates availability or verification, correct it through the same publication channel."
+  }
+}
